@@ -8,9 +8,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Mode (Luma | Chroma | Both)
@@ -43,6 +41,11 @@ float Contrast;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -52,6 +55,7 @@ SamplerState SamplePoint;
 //!DESC Curves, uses S-curves to increase contrast, without clipping highlights and shadows.
 //!STYLE PS
 //!IN INPUT
+//!OUT OUTPUT
 float4 Pass1(float2 texcoord) {
 	float4 colorInput = INPUT.SampleLevel(SamplePoint, texcoord, 0);
 	float3 lumCoeff = float3(0.2126, 0.7152, 0.0722);  //Values to calculate luma with

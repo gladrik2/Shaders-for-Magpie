@@ -4,9 +4,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL RGB Lift/Shadows (Red)
@@ -90,6 +88,11 @@ float RGB_Gain_Blue;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -99,7 +102,8 @@ SamplerState SamplePoint;
 //!DESC Changes colors in a scene with fine control.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 	float3 RGB_Lift = float3(RGB_Lift_Red, RGB_Lift_Green, RGB_Lift_Blue);
 	float3 RGB_Gamma = float3(RGB_Gamma_Red, RGB_Gamma_Green, RGB_Gamma_Blue);
@@ -115,5 +119,5 @@ float3 Pass1(float2 texcoord) {
 	// -- Gamma --
 	color = pow(abs(color), 1.0 / RGB_Gamma);
 	
-	return saturate(color);
+	return float4(saturate(color), 1.0);
 }

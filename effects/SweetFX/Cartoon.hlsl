@@ -4,9 +4,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Power
@@ -28,6 +26,11 @@ float EdgeSlope;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -37,7 +40,8 @@ SamplerState SamplePoint;
 //!DESC Outlines edges in a cartoon-like manner.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	const float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 	const float3 coefLuma = float3(0.2126, 0.7152, 0.0722);
 	const float2 pixSize = GetInputPt();
@@ -49,5 +53,5 @@ float3 Pass1(float2 texcoord) {
 
 	float edge = dot(float2(diff1, diff2), float2(diff1, diff2));
 
-	return saturate(pow(abs(edge), EdgeSlope) * -Power + color);
+	return float4(saturate(pow(abs(edge), EdgeSlope) * -Power + color), 1.0);
 }

@@ -44,9 +44,7 @@
 */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Scanlines
@@ -476,6 +474,12 @@ float Nostalgia_color_15_Blue;
 //!TEXTURE
 Texture2D INPUT;
 
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
+
 //!SAMPLER
 //!FILTER POINT
 SamplerState SamplePoint;
@@ -488,7 +492,8 @@ SamplerState SampleLinear;
 //!DESC In this effect I try to recreate the looks of systems from a bygone era. I've started with reducing the color to that of systems with 16 color palette.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	int colorCount = 16;
 	float2 ScreenSize = float2(GetInputSize());
 	
@@ -830,7 +835,7 @@ float3 Pass1(float2 texcoord) {
 			}
 		}
 		
-		color = closest_color; //return the pixel
+		color = closest_color; //return float4(the pixel
 	}
 
 	if (Nostalgia_scanlines == 1)
@@ -845,5 +850,5 @@ float3 Pass1(float2 texcoord) {
 
     if (LinearColor == 1) color = (color <= 0.0031308) ? (color * 12.92) : (1.055 * pow(abs(color), 1.0 / 2.4) - 0.055);
 
-	return color; //return the pixel
+	return float4(color, 1.0); //return the pixel
 }

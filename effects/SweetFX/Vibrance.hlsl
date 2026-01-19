@@ -18,9 +18,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Vibrance
@@ -66,6 +64,11 @@ float BlueBalance;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -75,7 +78,8 @@ SamplerState SamplePoint;
 //!DESC Vibrance intelligently boosts the saturation of pixels so pixels that had little color get a larger boost than pixels that had a lot. This avoids oversaturation of pixels that were already very saturated.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) : SV_Target
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) : SV_Target
 {
 	float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
   
@@ -98,5 +102,5 @@ float3 Pass1(float2 texcoord) : SV_Target
 	float3 coeffVibrance = float3(RedBalance, GreenBalance, BlueBalance) * Vibrance;
 	color = lerp(luma, color, 1.0 + (coeffVibrance * (1.0 - (sign(coeffVibrance) * color_saturation))));
 
-	return color;
+	return float4(color, 1.0);
 }

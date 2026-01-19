@@ -9,9 +9,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Type
@@ -78,6 +76,11 @@ float CenterY;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -87,6 +90,7 @@ SamplerState SamplePoint;
 //!DESC Darkens the edges of the image to make it look more like it was shot with a camera lens. May cause banding artifacts.
 //!STYLE PS
 //!IN INPUT
+//!OUT OUTPUT
 float4 Pass1(float2 tex) {
 	float4 color = INPUT.SampleLevel(SamplePoint, tex, 0);
 	float2 Center = float2(CenterX, CenterY);

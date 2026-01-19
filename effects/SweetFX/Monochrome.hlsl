@@ -33,9 +33,7 @@
 */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Preset
@@ -80,6 +78,11 @@ float Monochrome_color_saturation;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -89,7 +92,8 @@ SamplerState SamplePoint;
 //!DESC Removes color making everything monochrome.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 
 	float3 Coefficients = float3(0.21, 0.72, 0.07);
@@ -125,5 +129,5 @@ float3 Pass1(float2 texcoord) {
 	color = lerp(grey, color, Monochrome_color_saturation);
 
 	// Return the result
-	return saturate(color);
+	return float4(saturate(color), 1.0);
 }

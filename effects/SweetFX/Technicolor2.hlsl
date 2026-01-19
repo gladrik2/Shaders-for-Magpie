@@ -5,9 +5,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Color Strength (Red)
@@ -65,6 +63,11 @@ float Strength;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -74,7 +77,8 @@ SamplerState SamplePoint;
 //!DESC Saturates colors for technicolor effect.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 	
 	float3 temp = 1.0 - color;
@@ -96,5 +100,5 @@ float3 Pass1(float2 texcoord) {
 	color = lerp(color, temp2, Strength);
 	color = lerp(dot(color, 0.333), color, Saturation);
 
-	return color;
+	return float4(color, 1.0);
 }

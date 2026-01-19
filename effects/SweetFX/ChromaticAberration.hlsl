@@ -8,9 +8,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Shift X-axis
@@ -40,6 +38,11 @@ float Strength;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -53,7 +56,8 @@ SamplerState SampleLinear;
 //!DESC Distorts the image by shifting each color component, which creates color artifacts similar to those in a very cheap lens or a cheap sensor.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 color, colorInput = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 	float2 pixSize = GetInputPt();
 	float2 Shift = float2(ShiftX, ShiftY);
@@ -63,5 +67,5 @@ float3 Pass1(float2 texcoord) {
 	color.b = INPUT.SampleLevel(SampleLinear, texcoord - pixSize * Shift, 0).b;
 
 	// Adjust the strength of the effect
-	return lerp(colorInput, color, Strength);
+	return float4(lerp(colorInput, color, Strength), 1.0);
 }

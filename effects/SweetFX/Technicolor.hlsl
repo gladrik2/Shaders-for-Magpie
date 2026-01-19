@@ -5,9 +5,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Power
@@ -52,6 +50,11 @@ float Strength;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -61,7 +64,8 @@ SamplerState SamplePoint;
 //!DESC Desaturates colors for technicolor effect.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	const float3 cyanfilter = float3(0.0, 1.30, 1.0);
 	const float3 magentafilter = float3(1.0, 0.0, 1.05);
 	const float3 yellowfilter = float3(1.6, 1.6, 0.05);
@@ -78,5 +82,5 @@ float3 Pass1(float2 texcoord) {
 	float3 output_g = dot(greenfilter, negative_mul_g).xxx + magentafilter;
 	float3 output_b = dot(magentafilter2, negative_mul_b).xxx + yellowfilter;
 
-	return lerp(tcol, output_r * output_g * output_b, Strength);
+	return float4(lerp(tcol, output_r * output_g * output_b, Strength), 1.0);
 }

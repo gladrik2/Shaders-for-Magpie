@@ -8,9 +8,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Power
@@ -39,6 +37,11 @@ float radius2;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -52,7 +55,8 @@ SamplerState SampleLinear;
 //!DESC Not actual HDR - It just tries to mimic an HDR look (relatively high performance cost).
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 	float2 pixSize = GetInputPt();
 
@@ -83,5 +87,5 @@ float3 Pass1(float2 texcoord) {
 	float3 blend = HDR + color;
 	color = pow(abs(blend), abs(HDRPower)) + HDR; // pow - don't use fractions for HDRpower
 	
-	return saturate(color);
+	return float4(saturate(color), 1.0);
 }

@@ -16,9 +16,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Border Width (Pixels)
@@ -73,6 +71,11 @@ float border_color_Blue;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -82,7 +85,8 @@ SamplerState SamplePoint;
 //!DESC Creates a border around top/bottom or sides of the window.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 	float3 border_color = float3(border_color_Red, border_color_Green, border_color_Blue) / 255.0;
 	float2 inputSize = float2(GetInputSize());
@@ -99,5 +103,5 @@ float3 Pass1(float2 texcoord) {
 	float2 border = (pixSize * border_width_variable); // Translate integer pixel width to floating point
 	float2 within_border = saturate((-texcoord * texcoord + texcoord) - (-border * border + border)); // Becomes positive when inside the border and zero when outside
 
-	return lerp(border_color, color, float(all(within_border)));
+	return float4(lerp(border_color, color, float(all(within_border))), 1.0);
 }

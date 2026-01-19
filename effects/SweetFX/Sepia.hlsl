@@ -1,7 +1,5 @@
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Tint Color (Red Component)
@@ -38,6 +36,11 @@ float Strength;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -47,9 +50,10 @@ SamplerState SamplePoint;
 //!DESC Creates a color overlay to tint the screen.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 col = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 	float3 Tint = float3(TintRed, TintGreen, TintBlue) / 255.0;
 
-	return lerp(col, col * Tint * 2.55, Strength);
+	return float4(lerp(col, col * Tint * 2.55, Strength), 1.0);
 }

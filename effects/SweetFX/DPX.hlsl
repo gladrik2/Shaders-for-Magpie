@@ -3,9 +3,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL RGB Curve (Red)
@@ -90,6 +88,11 @@ float Strength;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -103,6 +106,7 @@ SamplerState SampleLinear;
 //!DESC DPX
 //!STYLE PS
 //!IN INPUT
+//!OUT OUTPUT
 static const float3x3 RGB = float3x3(
 	2.6714711726599600, -1.2672360578624100, -0.4109956021722270,
 	-1.0251070293466400,  1.9840911624108900,  0.0439502493584124,
@@ -114,7 +118,7 @@ static const float3x3 XYZ = float3x3(
 	0.0234517888692628,  0.1126992737203000,  0.8668396731242010
 );
 
-float3 Pass1(float2 texcoord) {
+float4 Pass1(float2 texcoord) {
 	float3 RGB_C = float3(RGB_C_Red, RGB_C_Green, RGB_C_Blue);
 	float3 RGB_Curve = float3(RGB_Curve_Red, RGB_Curve_Green, RGB_Curve_Blue);
 
@@ -135,5 +139,5 @@ float3 Pass1(float2 texcoord) {
 	c0 = (1.0 - Saturation) * luma + Saturation * c0;
 	c0 = mul(RGB, c0);
 
-	return lerp(input, c0, Strength);
+	return float4(lerp(input, c0, Strength), 1.0);
 }

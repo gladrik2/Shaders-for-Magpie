@@ -21,9 +21,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Black Point
@@ -59,6 +57,11 @@ int HighlightClipping;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -68,7 +71,8 @@ SamplerState SamplePoint;
 //!DESC Allows you to set a new black and a white level. This increases contrast, but clips any colors outside the new range to either black or white and so some details in the shadows or highlights can be lost.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float black_point_float = BlackPoint / 255.0;
 	float white_point_float = WhitePoint == BlackPoint ? (255.0 / 0.00025) : (255.0 / (WhitePoint - BlackPoint)); // Avoid division by zero if the white and black point are the same
 
@@ -95,5 +99,5 @@ float3 Pass1(float2 texcoord) {
 		color = clipped_colors;
 	}
 
-	return color;
+	return float4(color, 1.0);
 }

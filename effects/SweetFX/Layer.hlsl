@@ -25,9 +25,7 @@
 */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Position X-axis
@@ -64,6 +62,11 @@ float Layer_Blend;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -81,6 +84,7 @@ SamplerState SampleLinear;
 //!DESC Blends an image with the game.
 //!STYLE PS
 //!IN INPUT, Layer
+//!OUT OUTPUT
 float4 Pass1(float2 texCoord) {
     const float4 backColor = INPUT.SampleLevel(SamplePoint, texCoord, 0);
     const float2 ScreenSize = float2(GetInputSize());

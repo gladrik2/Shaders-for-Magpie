@@ -37,11 +37,8 @@
 // * Restore quality options (currently hardcoded to High)
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
-//!USE_DYNAMIC
-
+//!VERSION 4
+//!USE _DYNAMIC
 //!PARAMETER
 //!LABEL Bloom debug
 //!DEFAULT 0
@@ -134,8 +131,21 @@ float BlurSigma;
 //!STEP 0.01
 float BloomSaturation;
 
+//!PARAMETER
+//!LABEL Enable Auto Exposure (Temporal)
+//!DEFAULT 1
+//!MIN 0
+//!MAX 1
+//!STEP 1
+int EnableAutoExposure;
+
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 // Magpie does not generate mipmaps, so I have to shrink manually to find average Luma
 
@@ -341,12 +351,20 @@ float Pass7(float2 texcoord) {
 //!IN texBLuma5, texBPrevAvgLuma
 //!OUT texBAvgLuma
 float Pass8(float2 texcoord) {
-    float luma       = texBLuma5.SampleLevel(SampleLinear, float2(0.5f, 0.5f), 8).x;
-    luma             = exp2( luma );
-    // Magpie does not give time or frametime, so I have to hardcode this to some framerate
-    float prevluma   = texBPrevAvgLuma.SampleLevel(SamplePoint, float2(0.5f, 0.5f), 0).x;
-    float avgLuma    = lerp( prevluma, luma, 2.0 * rcp(FPS)); 
-    return avgLuma;
+    float luma = texBLuma5.SampleLevel(SampleLinear, float2(0.5f, 0.5f), 8).x;
+    luma = exp2(luma);
+
+    if (EnableAutoExposure == 0)
+    {
+        // Instant exposure (no temporal smoothing)
+        return luma;
+    }
+
+    float prevluma = texBPrevAvgLuma.SampleLevel(
+        SamplePoint, float2(0.5f, 0.5f), 0
+    ).x;
+
+    return lerp(prevluma, luma, 2.0 * rcp(FPS));
 }
 
 //!PASS 9
@@ -488,11 +506,11 @@ float4 Pass11(float2 texcoord) {
 //!DESC PS_Gaussian
 //!STYLE PS
 //!IN texBloom, INPUT, texNoiseRGB
-
+//!OUT OUTPUT
 float4 dither(float2 coords, int var, bool enabler, float str, bool motion, float swing )
 {
     float2 dither_uv = float2(GetOutputSize()) / 512.0;
-    float pp = (GetFrameCount() / FPS) % 128.0;
+    float pp = (__frameCount / FPS) % 128.0;
 
     coords.xy    *= dither_uv.xy;
     float4 noise  = texNoiseRGB.SampleLevel(SamplePointWrap, coords.xy, 0);

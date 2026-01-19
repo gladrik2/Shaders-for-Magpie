@@ -8,10 +8,8 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
-//!USE_DYNAMIC
+//!VERSION 4
+//!USE _DYNAMIC
 
 //!PARAMETER
 //!LABEL Intensity
@@ -51,6 +49,11 @@ int SignalToNoiseRatio;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -60,7 +63,8 @@ SamplerState SamplePoint;
 //!DESC Computes a noise pattern and blends it with the image to create a film grain look.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
   
 	//float inv_luma = dot(color, float3(-0.2126, -0.7152, -0.0722)) + 1.0;
@@ -74,7 +78,7 @@ float3 Pass1(float2 texcoord) {
 	
 	//time counter using requested counter from ReShade
 	// Magpie only has frame count, not elapsed time in milliseconds, so I rescaled this for frametime at 60 fps
-	float t = GetFrameCount() * 0.03722833;
+	float t = __frameCount * 0.03722833;
 	
 	//PRNG 2D - create two uniform noise values and save one DP2ADD
 	float seed = dot(texcoord, float2(12.9898, 78.233));// + t;
@@ -121,5 +125,5 @@ float3 Pass1(float2 texcoord) {
 	//color.rgb = frac(gauss_noise1).xxx; //show the noise
 	//color.rgb = (gauss_noise1 > 0.999) ? float3(1.0,1.0,0.0) : 0.0 ; //does it reach 1.0?
 	
-	return color.rgb;
+	return float4(color.rgb, 1.0);
 }

@@ -4,9 +4,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Gamma/Midtones
@@ -82,6 +80,11 @@ float FogColor_Blue;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -91,7 +94,8 @@ SamplerState SamplePoint;
 //!DESC Changes color of the scene with simpler controls.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 	float3 FogColor = float3(FogColor_Red, FogColor_Green, FogColor_Blue);
 	color = saturate(color - Defog * FogColor * 2.55); // Defog
@@ -115,5 +119,5 @@ float3 Pass1(float2 texcoord) {
 	float3 diffcolor = color - middlegray;
 	color = (color + diffcolor * Saturation) / (1 + (diffcolor * Saturation)); // Saturation
 	
-	return color;
+	return float4(color, 1.0);
 }

@@ -8,9 +8,7 @@
  */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 //!PARAMETER
 //!LABEL Matrix Red To Red
@@ -104,6 +102,11 @@ float Strength;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -113,7 +116,8 @@ SamplerState SamplePoint;
 //!DESC ColorMatrix allow the user to transform the colors using a color matrix.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1(float2 texcoord) {
+//!OUT OUTPUT
+float4 Pass1(float2 texcoord) {
 	float3 color = INPUT.SampleLevel(SamplePoint, texcoord, 0).rgb;
 
 	const float3x3 ColorMatrix = float3x3(
@@ -123,5 +127,5 @@ float3 Pass1(float2 texcoord) {
 	);
 	color = lerp(color, mul(ColorMatrix, color), Strength);
 
-	return saturate(color);
+	return float4(saturate(color), 1.0);
 }

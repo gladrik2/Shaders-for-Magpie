@@ -38,9 +38,7 @@
 */
 
 //!MAGPIE EFFECT
-//!VERSION 3
-//!OUTPUT_WIDTH INPUT_WIDTH
-//!OUTPUT_HEIGHT INPUT_HEIGHT
+//!VERSION 4
 
 /*------------------.
 | :: UI Settings :: |
@@ -168,6 +166,11 @@ int Ascii_dithering_debug_gradient;
 
 //!TEXTURE
 Texture2D INPUT;
+//!TEXTURE
+//!WIDTH INPUT_WIDTH
+//!HEIGHT INPUT_HEIGHT
+Texture2D OUTPUT;
+
 
 //!SAMPLER
 //!FILTER POINT
@@ -185,7 +188,8 @@ SamplerState SampleLinear;
 //!DESC Converts the image to ASCII characters using a greyscale algoritm, cherrypicked characters and a custom bitmap font stored in a set of floats.
 //!STYLE PS
 //!IN INPUT
-float3 Pass1( float2 tex ) {
+//!OUT OUTPUT
+float4 Pass1( float2 tex ) {
 	float2 BufferScreenSize = float2(GetInputSize());
 	float2 BufferPixelSize = GetInputPt();
 
@@ -458,7 +462,7 @@ float3 Pass1( float2 tex ) {
 	'-------------*/
 
 	//color = gray;
-	return saturate(color);
+	return float4(saturate(color), 1.0);
 }
 
 
