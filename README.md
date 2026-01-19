@@ -25,3 +25,7 @@ This is a repository for shaders I have ported for compatibility with [Magpie](h
   - Tonemap.hlsl - Modify contrast and colors.
   - Vibrance.hlsl - Modify colors.
   - Vignette.hlsl - Add dark fringing to the edges of the image.
+- [Reshade shaders repository](https://github.com/crosire/reshade-shaders) - by [crosire](https://github.com/crosire)
+  - AmbientLight.hlsl - by [Ganossa](https://github.com/Ganossa) - Add a global light source.
+  - Colourfulness.hlsl - by [bacondither](https://github.com/bacondither) - Modify colors.
+  - GaussianBlur.hlsl - by [Ioxa53](https://github.com/Ioxa53) - Blur image.
