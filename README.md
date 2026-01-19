@@ -1,3 +1,5 @@
+Fork of https://github.com/EricBanker12/Shaders-for-Magpie with additional effects and MagpieFX v4 updates.
+
 # Shaders for [Magpie](https://github.com/Blinue/Magpie)
 This is a repository for shaders I have ported for compatibility with [Magpie](https://github.com/Blinue/Magpie), a lightweight window scaling tool which enhances game graphics and enables non-fullscreen games to display in fullscreen mode.
 
